@@ -24,8 +24,6 @@ void keyScan()
     key_up = 1;
     //抬起状态
   }
-
-
 }
 
 
