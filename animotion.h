@@ -1,3 +1,5 @@
+/*Arduino OLED 动画线性函数*/
+
 void animation(float *a, float *a_trg, uint8_t n)
 {
   if (fabs(*a - *a_trg) < 0.15)
