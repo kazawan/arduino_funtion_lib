@@ -1,9 +1,9 @@
 #include <Arduino.h>
-#define btn 23
+
 
 typedef struct{
-  byte pin;
-  unsigned char key_up = 1;
+  int pin;
+  int key_up;
   
 }SIMPLE_BTN_t;
 
@@ -13,32 +13,49 @@ SIMPLE_BTN_t btnGroup[] = {
   {16,1}
 };
 
-void keyInit(SIMPLE_BTN_t b[])
+void keyInit(SIMPLE_BTN_t btn[])
 {
-  int len  = sizeof(b)/sizeof(b[0]);
-  for(int i = 0 ; i < len ; i++ )
+  // int len  = sizeof(btn)/sizeof(btn[0]);
+  for (int i = 0; i < 3; i++)
   {
-    pinMode(b[i].pin,INPUT_PULLUP);
+    pinMode(btn[i].pin, INPUT_PULLUP);
   }
 }
 
 
-void keyScan()
+void keyScan(SIMPLE_BTN_t btn[])
 {
-  static unsigned char key_up = 1;
-  
+  // int len  = sizeof(btn)/sizeof(btn[0]);
+  for (int i = 0; i < 3; i++)
+  {
+    if (btn[i].key_up && !digitalRead(btn[i].pin))
+    {
+      
+      
+      switch (i)
+      {
+      
+      case 0:
+        Serial.println("key_1");
+       
+        break;
+      case 1:
+        Serial.println("key_2");
+       
+        break;
+      case 2:
+        Serial.println("key_3");
+        
+        break;
+      }
+      btn[i].key_up = 0;
 
-  // sw key
-  if (key_up && !digitalRead(btn))
-  {
-    //按下状态
-    key_up = 0;
-    
-  }
-  else if (digitalRead(btn))
-  {
-    key_up = 1;
-    //抬起状态
+    }
+    else if (digitalRead(btn[i].pin))
+    {
+      btn[i].key_up = 1;
+      
+    }
   }
 }
 
