@@ -1,9 +1,25 @@
 #include <Arduino.h>
 #define btn 23
 
-void keyInit()
+typedef struct{
+  byte pin;
+  unsigned char key_up = 1;
+  
+}SIMPLE_BTN_t;
+
+SIMPLE_BTN_t btnGroup[] = {
+  {14,1},
+  {15,1},
+  {16,1}
+};
+
+void keyInit(SIMPLE_BTN_t b[])
 {
-  pinMode(btn, INPUT_PULLUP); 
+  int len  = sizeof(b)/sizeof(b[0]);
+  for(int i = 0 ; i < len ; i++ )
+  {
+    pinMode(b[i].pin,INPUT_PULLUP);
+  }
 }
 
 
