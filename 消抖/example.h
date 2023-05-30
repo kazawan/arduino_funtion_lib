@@ -3,7 +3,6 @@
 
 void setup() {
   Serial.begin(115200);
-  pixels.begin();
   btn_init(push_btn.pin);
   
 }
