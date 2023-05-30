@@ -1,17 +1,19 @@
-
+/*简单消抖
+ *包含结构体
+ */
 
 //定义按钮
 typedef struct BTN_t
 {
-  byte pin;管教
-  int keyup;
-  int current_time;
-  unsigned int debouce_time;
+  byte pin;//管脚
+  int keyup;//按键状态
+  int current_time;//时间
+  unsigned int debouce_time;//消抖时间
 };
 
-BTN_t push_btn = {7, 1, 0,150};
+// BTN_t push_btn = {7, 1, 0,150};
 
-int count;
+// int count;
 
 //**************************
 //初始化
@@ -20,16 +22,18 @@ void btn_init(byte p)
   pinMode(p, INPUT_PULLUP);
 }
 
-
+//**************************
 //按键扫描
 void btn_scan(byte p, int *keyup, int *t,unsigned int debouce)
 {
-  if (*keyup && !digitalRead(p))
+  if (*keyup && !digitalRead(p))//如果keyup == 1 管脚状态处于断开状态  p == 0 
   {
     if(millis() - *t > debouce)
     {
       *keyup = 0;
-      Serial.println("d");
+      //*****你的程序在这下面*********
+      
+      //*****************************
       *t = millis();
     }
   } else if (digitalRead(p))
