@@ -1,6 +1,6 @@
 #include "debouce_btn.h"
 
-
+BTN_t push_btn = {7, 1, 0,150};
 void setup() {
   Serial.begin(115200);
   btn_init(push_btn.pin);
