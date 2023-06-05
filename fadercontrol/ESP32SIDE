@@ -1,0 +1,74 @@
+#include <Arduino.h>
+#include <HardwareSerial.h>
+
+HardwareSerial espSerial(2); // RX, TX
+#define LED_PIN 2
+
+void RxTask();
+void ledTask();
+int sys_init_flag = 0; // 0: not init, 1: init done
+String TxMsg = "/300";
+String RxMsg = "";
+String cmd_tag = "/";
+int tag_index = 0;
+// String cmd_init = "INIT";
+void RxTask() // receive data from 32u4
+{
+
+  String msg = "";
+  while (espSerial.available() > 0)
+  {
+    RxMsg += char(espSerial.read());
+    delay(2);
+  }
+  if (RxMsg.indexOf(cmd_tag) >= 0)
+  {
+    tag_index = RxMsg.indexOf(cmd_tag);
+    sys_init_flag = RxMsg.substring(tag_index + 1).toInt();
+    RxMsg = "";
+  }
+  else
+  {
+    RxMsg = "";
+  }
+}
+
+int timeNow = 0;
+int initTime = 0;
+unsigned int flashTime = 300;
+/**
+ * * sys_init_flag == 0: not init, 1: init done
+ * * 当为 1时 系统进入正常工作状态
+*/
+void ledTask() 
+{
+  if (sys_init_flag == 0)
+  {
+
+    espSerial.println(TxMsg);
+    Serial.println(TxMsg);
+    delay(1000);
+  }
+  else
+  {
+    if (millis() - timeNow > flashTime)
+    {
+      digitalWrite(LED_PIN, !digitalRead(LED_PIN));
+      Serial.println("on ");
+      timeNow = millis();
+    }
+  }
+}
+
+void setup()
+{
+  Serial.begin(115200);
+  espSerial.begin(9600);
+  pinMode(LED_PIN, OUTPUT);
+  espSerial.onReceive(RxTask);
+}
+
+void loop()
+{
+  ledTask();
+}
