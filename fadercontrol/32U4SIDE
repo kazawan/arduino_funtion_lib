@@ -1,0 +1,82 @@
+#include <Arduino.h>
+
+#define LED_PIN 13
+void ledTask();
+void serialEvent1();
+
+String RXCMD = "";
+String cmd_tag = "/";
+int index = 0;
+unsigned int flashTime = 1000;
+
+int sys_init_flag = 0; // 0: not init, 1: init done
+
+int timeNow = 0;
+int inittime = 0;
+
+
+/**
+ * * sys_init_flag == 0: not init, 1: init done
+ * * 当为 1时 系统进入正常工作状态
+*/
+void ledTask()
+{
+  if (sys_init_flag == 0)
+  {
+
+    
+    digitalWrite(LED_PIN, 1);
+    delay(flashTime);
+    digitalWrite(LED_PIN, 0);
+    delay(flashTime);
+    
+  }
+  else
+  {
+    digitalWrite(LED_PIN, 1);
+    delay(flashTime);
+    digitalWrite(LED_PIN, 0);
+    delay(flashTime);
+  }
+}
+// cmd format: /1000
+
+void setup()
+{
+  // Serial.begin(115200);
+  Serial1.begin(9600);
+  pinMode(LED_PIN, OUTPUT);
+  // Serial1._rx_complete_irq(); // enable interrupt
+}
+
+void loop()
+{
+  ledTask();
+}
+/**
+ * ! 注意必须时 serialEvent1() 注意大小写
+*/
+void serialEvent1()
+{
+  while (Serial1.available() > 0)
+    {
+      RXCMD += char(Serial1.read());
+      delay(2);
+      Serial.println(RXCMD);
+      sys_init_flag = 1;
+    }
+    if (RXCMD.indexOf(cmd_tag) >= 0)
+    {
+      index = RXCMD.indexOf(cmd_tag);
+      flashTime = RXCMD.substring(index+1).toInt();
+
+      Serial1.println("/1"); // send back to confirm 1: init done 0: not init
+      sys_init_flag = 1;
+      RXCMD = "";
+    }
+    else
+    {
+      RXCMD = "";
+      Serial1.println("/0"); // send back to confirm
+    }
+}
