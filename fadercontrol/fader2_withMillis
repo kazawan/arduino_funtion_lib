@@ -1,0 +1,92 @@
+#include <Arduino.h>
+
+#define LED_BUILTIN 13
+
+struct RxCmd {
+  String cmd;
+  String cmd_tag;
+};
+
+struct LEDCMD {
+  int index;
+  int time;
+  
+};
+
+void ledTask();
+void flashTask();
+
+RxCmd rxCmd = {"", "/"};
+LEDCMD ledCmd = {0, 0};
+int cmd_flag = 0;
+int cmd_count = 0 ;
+int flash_time = 1000;
+
+
+int timeNow = 0;
+void flashTask()
+{
+  if(millis() - timeNow > flash_time)
+  {
+    digitalWrite(LED_BUILTIN,!digitalRead(LED_BUILTIN));
+    timeNow = millis();
+  }
+}
+
+void ledTask()
+{
+  switch (cmd_flag)
+  {
+    case 0:
+      flashTask();
+      break;
+    case 1:
+      digitalWrite(LED_BUILTIN, 1);
+      delay(300);
+      digitalWrite(LED_BUILTIN, 0);
+      delay(300);
+      cmd_count++;
+      if (cmd_count++ >= 2)
+      {
+        cmd_count = 0;
+        cmd_flag = 0;
+        Serial.println("setting done");
+      }
+      break;
+  }
+}
+
+
+void setup() {
+  // put your setup code here, to run once:
+  Serial.begin(9600);
+  Serial.println("input");
+  pinMode(LED_BUILTIN, OUTPUT);
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  ledTask();
+}
+
+
+void serialEvent() {
+  while (Serial.available()) {
+    rxCmd.cmd += char(Serial.read());
+    delay(2);
+  };
+  if (rxCmd.cmd.indexOf(rxCmd.cmd_tag) >= 0) {
+    ledCmd.index = rxCmd.cmd.indexOf("T");
+    ledCmd.time = rxCmd.cmd.substring(ledCmd.index + 1).toInt();
+    flash_time = ledCmd.time;
+    Serial.println("SETTING");
+    Serial.print("FLASHTIME : ");
+    Serial.println(flash_time);
+    rxCmd.cmd = "";
+    cmd_flag = 1;
+  } else {
+    Serial.println("CMD FAIL");
+    rxCmd.cmd = "";
+    cmd_flag = 0;
+  }
+}
