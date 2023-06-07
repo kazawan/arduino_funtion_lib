@@ -41,3 +41,28 @@ void btn_scan(byte p, int *keyup, int *t,unsigned int debouce)
     *keyup = 1;
   }
 }
+
+
+//**************************
+//带返回值 1 按下 0 未按下
+int btn_state(byte p, int *keyup, int *t,unsigned int debouce)
+{
+  if (*keyup && !digitalRead(p))//如果keyup == 1 管脚状态处于断开状态  p == 0 
+  {
+    if(millis() - *t > debouce)
+    {
+      *keyup = 0;
+      //*****你的程序在这下面*********
+      return 1;
+      //*****************************
+      *t = millis();
+    }
+  } else if (digitalRead(p))
+  {
+    *keyup = 1;
+    return 0;
+  }else{
+    return 0;
+  }
+
+};
