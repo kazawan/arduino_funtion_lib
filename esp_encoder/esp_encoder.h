@@ -2,7 +2,7 @@
 #define ESP_ENCODER_H
 
 #include <Arduino.h>
-#include "esp_encoder.c"
+
 // void encoder_init(byte, byte, byte);
 
 // const int Int_Pin = digitalPinToInterrupt(encoder.CLK);
@@ -14,6 +14,26 @@
 //     pinMode(sw, INPUT_PULLUP);
 //     const int Int_Pin = digitalPinToInterrupt(clk);
 // }
+
+
+
+typedef struct
+{
+    byte CLK;
+    byte DT;
+    int val;
+    int lastCLK;
+} ENCODER;
+
+
+
+typedef struct 
+{
+    byte SW;                  // 管脚
+    int keyup ;                 // 按键状态
+    int current_time;          // 时间
+    unsigned int debouce_time; // 消抖时间
+}ESWITCH;
 
 //**编码器🎛️
 void encoder_begin(void *pt, byte c, byte d)
