@@ -39,7 +39,7 @@ void btn_scan(BTN_t* p)
       if (p->pin_read == 0 && p->keyup == 1 && p->pin_read == digitalRead(p->pin))//如果keyup == 1 管脚状态处于断开状态  p == 0
       {
         p->long_time_release = millis();
-        if (millis() - p->current_time > p->debouce_time)
+        if (millis() - p->current_time > p->debouce_time) //消抖（非必要）
         {
 
           p->current_time = millis();
