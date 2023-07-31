@@ -7,7 +7,7 @@ typedef struct BTN_t
   int current_time;//时间
   int long_time_release;
   unsigned int debouce_time;//消抖时间
-  byte pin_read; //管脚状态
+  byte pin_read; //管脚状态  上拉 默认 1  下拉 默认0
 
 };
 
