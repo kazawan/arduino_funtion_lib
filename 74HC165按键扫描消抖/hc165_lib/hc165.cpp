@@ -1,16 +1,32 @@
 
 #include "hc165.h"
 
-void  press_handler()
+/**
+ * @brief 按键状态
+ * 
+*/
+_weak_ void  press_handler() 
 {
-  UNUSED(1);
+//   Serial.println("press:(in 165.cpp)");
+}
+
+
+/**
+ * @brief 按键释放状态
+*/
+_weak_ void  release_handler()
+{
+//   Serial.println("release:(in main.cpp)");
 };
 
-void  release_handler()
-{
-  UNUSED(1);
-};
 
+/**
+ * @brief 按键初始化
+ * @param hc165 74HC165芯片配置 
+ * @param btn165 按键状态
+ * @param key_num 按键数量
+ * 
+*/
 void hc165_init(HC165_typeDef *hc165,BTN165_typeDef *btn165,int key_num)
 {
     int i;
@@ -27,6 +43,13 @@ void hc165_init(HC165_typeDef *hc165,BTN165_typeDef *btn165,int key_num)
 };
 
 
+/**
+ * @brief 按键扫描
+ * @param hc165 74HC165芯片配置
+ * @param key_map 按键映射
+ * @param btn165 按键状态
+ * @return null
+*/
 void hc165_scan(HC165_typeDef *hc165,KEYMAP_typeDef *key_map,BTN165_typeDef *btn165){
     int j;
     for(j = 0 ;j < sample_rate; j++)
