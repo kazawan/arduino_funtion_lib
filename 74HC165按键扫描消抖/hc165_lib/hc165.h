@@ -8,6 +8,7 @@
 #define LATCHUP(latch) digitalWrite(latch,1)
 #define CLKDOWN(clock) digitalWrite(clock,0)
 #define CLKUP(clock) digitalWrite(clock,1)
+#define UNUSED(X) (void)X //需加这个在weak函数中...否侧程序跑飞
 
 struct HC165_typeDef
 {

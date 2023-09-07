@@ -1,6 +1,16 @@
 
 #include "hc165.h"
 
+void  press_handler()
+{
+  UNUSED(1);
+};
+
+void  release_handler()
+{
+  UNUSED(1);
+};
+
 void hc165_init(HC165_typeDef *hc165,BTN165_typeDef *btn165,int key_num)
 {
     int i;
