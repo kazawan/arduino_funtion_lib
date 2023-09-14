@@ -95,7 +95,7 @@ static void power_mode_switch(int mode)
 void power_check(power_manager_t *power_manager)
 {
 
-    if (millis() - power_manager->sleep_timer > 3000)
+    if (millis() - power_manager->sleep_timer > power_manager->sleep_time)
     {
         power_manager->sleep_flag = 1;
     }
