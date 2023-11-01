@@ -46,6 +46,10 @@ def text1_canvas_event(event):
         fill="#f00"
     )
 
+#<Button-1>鼠标左键
+#<Button-2>鼠标中键
+#<Button-3>鼠标右键
+
 canvas.tag_bind(
     tagOrId='text1-1',
     sequence='<Button>',#<Button>此为鼠标点击
