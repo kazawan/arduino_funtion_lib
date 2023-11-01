@@ -48,7 +48,7 @@ def text1_canvas_event(event):
 
 canvas.tag_bind(
     tagOrId='text1-1',
-    sequence='<Button>',
+    sequence='<Button>',#<Button>此为鼠标点击
     func=text1_canvas_event
     
 )
